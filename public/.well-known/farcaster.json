@@ -1,16 +1,15 @@
 {
   "accountAssociation": {
-    "header": "YOUR_HEADER_HERE",
-    "payload": "YOUR_PAYLOAD_HERE", 
-    "signature": "YOUR_SIGNATURE_HERE"
+    "header": "eyJmaWQiOjExMTgzNzAsInR5cGUiOiJhdXRoIiwia2V5IjoiMHg0M2I2MkJkMTM0NWFEMzRDYjgyRTkwQUUyMDc4ODkzQWEyZjdmMDRhIn0",
+    "payload": "eyJkb21haW4iOiJ0cmF2ZWxhYmxlLXJ1aW5vdXNseS1iYXNpbGlhLm5ncm9rLWZyZWUuZGV2In0",
+    "signature": "zJyXPAiP82OS2vc8Umv8185XRbX259R+Hep7mqlsvC1HIrpSVZW9dKQ0OCTVc9+3IPBH5gIiXbnexS96hI6O+hw="
   },
   "frame": {
     "version": "1",
     "name": "Protardio Whitelist",
-    "iconUrl": "https://protardio.xyz/icon.png",
-    "splashImageUrl": "https://protardio.xyz/splash.png",
+    "iconUrl": "https://travelable-ruinously-basilia.ngrok-free.dev/logo.png",
+    "splashImageUrl": "https://travelable-ruinously-basilia.ngrok-free.dev/splash.gif",
     "splashBackgroundColor": "#0a0a0a",
-    "homeUrl": "https://protardio.xyz",
-    "webhookUrl": ""
+    "homeUrl": "https://travelable-ruinously-basilia.ngrok-free.dev"
   }
 }

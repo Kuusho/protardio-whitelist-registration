@@ -34,8 +34,8 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
   const filledSegments = Math.floor((progress / 100) * segments);
   
   return (
-    <div className="fixed inset-0 z-20 flex flex-col items-center justify-center bg-gradient-to-b from-sky-400 via-sky-300 to-green-500">
-      {/* Background image */}
+    <div className="fixed inset-0 z-20 flex flex-col items-center justify-end">
+      {/* Background image - full screen */}
       <div className="absolute inset-0">
         <Image
           src="/loading-bg.png"
@@ -45,31 +45,11 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
           priority
         />
       </div>
-      
-      {/* Hill with door - CSS fallback */}
-      <div className="flex-1 flex items-center justify-center relative z-10">
-        <div className="relative">
-          {/* Hill shape */}
-          <div 
-            className="w-80 h-48 sm:w-96 sm:h-56"
-            style={{
-              background: 'linear-gradient(180deg, #7cb342 0%, #558b2f 50%, #33691e 100%)',
-              clipPath: 'polygon(50% 0%, 100% 100%, 0% 100%)',
-              borderRadius: '50% 50% 0 0'
-            }}
-          />
-          {/* Door on hill */}
-          <div className="absolute top-4 left-1/2 -translate-x-1/2 w-16 h-28 sm:w-20 sm:h-32 bg-white border-4 border-gray-300 shadow-lg">
-            <div className="absolute inset-1 bg-gradient-to-br from-yellow-100 via-amber-200 to-yellow-300 opacity-80" />
-            <div className="absolute right-2 top-1/2 w-2 h-2 rounded-full bg-yellow-600" />
-          </div>
-        </div>
-      </div>
-      
-      {/* XP-style loading bar */}
+
+      {/* XP-style loading bar at bottom */}
       <div className="pb-20 sm:pb-24 relative z-10">
-        <div 
-          className="w-64 sm:w-80 h-6 bg-gray-200 border-2 border-gray-400 flex items-center px-0.5" 
+        <div
+          className="w-64 sm:w-80 h-6 bg-gray-200 border-2 border-gray-400 flex items-center px-0.5"
           style={{ borderStyle: 'inset' }}
         >
           {Array.from({ length: segments }).map((_, i) => (

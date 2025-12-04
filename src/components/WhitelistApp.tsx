@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { CRTEffects } from '@/components/CRTEffects';
 import { LoadingScreen } from '@/components/LoadingScreen';
@@ -43,10 +43,16 @@ export function WhitelistApp() {
   // Error states
   const [scoreError, setScoreError] = useState<string | null>(null);
   const [followError, setFollowError] = useState<string | null>(null);
-  
-  // Initialize SDK on mount
+
+  // Ref to prevent double initialization in React StrictMode
+  const hasInitializedRef = useRef(false);
+
+  // Initialize SDK on mount - call ready() to dismiss splash
   useEffect(() => {
-    initializeSdk();
+    if (hasInitializedRef.current) return;
+    hasInitializedRef.current = true;
+
+    initializeSdk().catch(console.error);
   }, []);
   
   // Check registration status on mount
@@ -573,26 +579,59 @@ export function WhitelistApp() {
           {/* Success Screen */}
           {screen === 'success' && userData && (
             <main className="flex-1 flex flex-col items-center justify-center px-4 py-6 sm:py-8">
+              {/* Rotating cube GIF */}
+              <div className="mb-4">
+                <Image
+                  src="/success-cube.gif"
+                  alt="Success"
+                  width={80}
+                  height={80}
+                  unoptimized
+                />
+              </div>
+
               <div className="text-center mb-6 sm:mb-8">
-                <div className="inline-block bg-protardio-green px-6 sm:px-8 py-2 sm:py-3 transform rotate-1 border-2 sm:border-4 border-[#003300] mb-4 sm:mb-6 shadow-[0_0_30px_rgba(0,255,0,0.4)]">
-                  <span className="text-black text-lg sm:text-xl font-pixel">
-                    REGISTERED!
-                  </span>
+                {/* Stamp effect */}
+                <div className="relative inline-block mb-4">
+                  <div
+                    className="border-4 border-protardio-green px-6 py-4 transform rotate-[-3deg]"
+                    style={{
+                      boxShadow: '0 0 30px rgba(0, 255, 0, 0.3)',
+                    }}
+                  >
+                    <p
+                      className="text-protardio-green text-xs sm:text-sm mb-1"
+                      style={{ fontFamily: '"Press Start 2P", monospace' }}
+                    >
+                      PROTARD REGISTERED
+                    </p>
+                    <p
+                      className="text-protardio-green text-lg sm:text-2xl"
+                      style={{
+                        fontFamily: '"Press Start 2P", monospace',
+                        textShadow: '0 0 20px rgba(0, 255, 0, 0.6)'
+                      }}
+                    >
+                      VISA APPROVED
+                    </p>
+                  </div>
+                  {/* Stamp overlay effect */}
+                  <div className="absolute inset-0 border-4 border-protardio-green/30 transform rotate-[2deg]" />
                 </div>
-                
-                <p className="text-gray-400 font-mono text-xs sm:text-sm mb-1 sm:mb-2">
+
+                <p className="text-gray-400 font-mono text-xs sm:text-sm mt-4 mb-1">
                   You&apos;re on the allowlist for
                 </p>
                 <h2 className="text-protardio-magenta text-sm sm:text-lg font-pixel">
                   PHASE 1 - TIER 3
                 </h2>
               </div>
-              
+
               {/* Details */}
               <div className="w-full max-w-sm border-2 sm:border-4 border-protardio-green bg-black/80 p-3 sm:p-4 mb-4 sm:mb-6 mx-4">
                 <div className="space-y-2 sm:space-y-3 font-mono text-xs sm:text-sm">
                   <div className="flex justify-between border-b border-protardio-green/20 pb-2">
-                    <span className="text-gray-500">USER</span>
+                    <span className="text-gray-500">PROTARD</span>
                     <span className="text-protardio-green">@{userData.username}</span>
                   </div>
                   <div className="flex justify-between border-b border-protardio-green/20 pb-2">
@@ -611,7 +650,15 @@ export function WhitelistApp() {
                   </div>
                 </div>
               </div>
-              
+
+              {/* Status badge */}
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-2 h-2 bg-protardio-green rounded-full animate-pulse" />
+                <span className="text-protardio-green font-mono text-xs uppercase tracking-wider">
+                  Clearance Granted
+                </span>
+              </div>
+
               {/* Mint date */}
               <div className="text-center mb-4 sm:mb-6">
                 <p className="text-gray-500 font-mono text-[10px] sm:text-xs mb-1">MINT OPENS</p>
@@ -619,51 +666,78 @@ export function WhitelistApp() {
                   JANUARY 2025
                 </p>
               </div>
-              
+
               {/* Actions */}
-              <div className="flex gap-3 sm:gap-4">
-                <button 
-                  onClick={handleShare}
-                  className="px-4 sm:px-6 py-2.5 sm:py-3 border-2 border-protardio-magenta bg-transparent text-protardio-magenta font-mono text-[10px] sm:text-xs uppercase tracking-wider hover:bg-protardio-magenta hover:text-black transition-all active:scale-95"
-                >
-                  SHARE
-                </button>
-                <button 
-                  onClick={() => window.close()}
-                  className="px-4 sm:px-6 py-2.5 sm:py-3 border-2 border-gray-600 bg-transparent text-gray-400 font-mono text-[10px] sm:text-xs uppercase tracking-wider hover:border-gray-400 hover:text-white transition-all active:scale-95"
-                >
-                  CLOSE
-                </button>
-              </div>
-              
-              <div className="mt-8 sm:mt-12 text-center">
-                <p className="text-gray-700 font-mono text-[10px] sm:text-xs italic">
-                  &quot;join the wartime effort&quot;
-                </p>
-              </div>
+              <button
+                onClick={handleShare}
+                className="px-6 py-3 border-2 border-protardio-magenta text-protardio-magenta font-mono text-xs uppercase hover:bg-protardio-magenta hover:text-black transition-all active:scale-95"
+              >
+                RECRUIT MORE PROTARDS
+              </button>
+
+              <p className="text-gray-700 font-mono text-[10px] mt-8 italic">
+                &quot;welcome to the wartime effort, soldier&quot;
+              </p>
             </main>
           )}
           
           {/* Already Registered Screen */}
           {screen === 'already-registered' && userData && (
             <main className="flex-1 flex flex-col items-center justify-center px-4 py-6 sm:py-8">
+              {/* Rotating cube GIF */}
+              <div className="mb-4">
+                <Image
+                  src="/success-cube.gif"
+                  alt="Success"
+                  width={80}
+                  height={80}
+                  unoptimized
+                />
+              </div>
+
               <div className="text-center mb-6 sm:mb-8">
-                <div className="inline-block bg-protardio-yellow px-6 sm:px-8 py-2 sm:py-3 transform -rotate-1 border-2 sm:border-4 border-yellow-700 mb-4 sm:mb-6">
-                  <span className="text-black text-lg sm:text-xl font-pixel">
-                    ALREADY IN!
-                  </span>
+                {/* Stamp effect */}
+                <div className="relative inline-block mb-4">
+                  <div
+                    className="border-4 border-protardio-green px-6 py-4 transform rotate-[-3deg]"
+                    style={{
+                      boxShadow: '0 0 30px rgba(0, 255, 0, 0.3)',
+                    }}
+                  >
+                    <p
+                      className="text-protardio-green text-xs sm:text-sm mb-1"
+                      style={{ fontFamily: '"Press Start 2P", monospace' }}
+                    >
+                      PROTARD REGISTERED
+                    </p>
+                    <p
+                      className="text-protardio-green text-lg sm:text-2xl"
+                      style={{
+                        fontFamily: '"Press Start 2P", monospace',
+                        textShadow: '0 0 20px rgba(0, 255, 0, 0.6)'
+                      }}
+                    >
+                      VISA APPROVED
+                    </p>
+                  </div>
+                  {/* Stamp overlay effect */}
+                  <div className="absolute inset-0 border-4 border-protardio-green/30 transform rotate-[2deg]" />
                 </div>
-                
-                <p className="text-gray-400 font-mono text-xs sm:text-sm">
-                  You&apos;ve already registered for the allowlist
+
+                <p className="text-gray-400 font-mono text-xs sm:text-sm mt-4">
+                  You&apos;re already on the allowlist
                 </p>
               </div>
-              
-              <div className="w-full max-w-sm border-2 sm:border-4 border-protardio-yellow bg-black/80 p-3 sm:p-4 mb-4 sm:mb-6 mx-4">
+
+              <div className="w-full max-w-sm border-2 sm:border-4 border-protardio-green bg-black/80 p-3 sm:p-4 mb-4 sm:mb-6 mx-4">
                 <div className="space-y-2 font-mono text-xs sm:text-sm">
-                  <div className="flex justify-between">
-                    <span className="text-gray-500">USER</span>
+                  <div className="flex justify-between border-b border-protardio-green/20 pb-2">
+                    <span className="text-gray-500">PROTARD</span>
                     <span className="text-protardio-green">@{userData.username}</span>
+                  </div>
+                  <div className="flex justify-between border-b border-protardio-green/20 pb-2">
+                    <span className="text-gray-500">FID</span>
+                    <span className="text-protardio-green">{userData.fid}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-gray-500">WALLET</span>
@@ -673,13 +747,25 @@ export function WhitelistApp() {
                   </div>
                 </div>
               </div>
-              
-              <button 
+
+              {/* Status badge */}
+              <div className="flex items-center gap-2 mb-6">
+                <div className="w-2 h-2 bg-protardio-green rounded-full animate-pulse" />
+                <span className="text-protardio-green font-mono text-xs uppercase tracking-wider">
+                  Clearance Granted
+                </span>
+              </div>
+
+              <button
                 onClick={handleShare}
                 className="px-6 py-3 border-2 border-protardio-magenta text-protardio-magenta font-mono text-xs uppercase hover:bg-protardio-magenta hover:text-black transition-all active:scale-95"
               >
-                SHARE WITH FRIENDS
+                RECRUIT MORE PROTARDS
               </button>
+
+              <p className="text-gray-700 font-mono text-[10px] mt-8 italic">
+                &quot;welcome to the wartime effort, soldier&quot;
+              </p>
             </main>
           )}
         </div>

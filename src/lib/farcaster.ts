@@ -1,42 +1,69 @@
-import { sdk } from '@farcaster/frame-sdk';
+import sdk from '@farcaster/miniapp-sdk';
 import type { FarcasterUser } from '@/types';
 
-// Initialize the SDK
+// Initialize the SDK and signal ready - dismisses splash screen
 export async function initializeSdk(): Promise<void> {
   try {
+    // Mark SDK as ready - THIS DISMISSES THE SPLASH
     await sdk.actions.ready();
+    console.log('Farcaster SDK ready() called successfully');
+
+    // Load user context
+    const context = await sdk.context;
+    if (context?.user) {
+      console.log('User context loaded:', context.user);
+    }
   } catch (error) {
     console.error('Failed to initialize Farcaster SDK:', error);
   }
 }
 
-// Sign in with Farcaster
+// Sign in with Farcaster / Get user from context
 export async function signInWithFarcaster(): Promise<FarcasterUser | null> {
   try {
-    // Use the SDK sign-in action
+    // In mini apps, user is already available via context
+    const context = await sdk.context;
+    const user = context?.user;
+
+    if (user) {
+      console.log('User found in context:', user);
+      return {
+        fid: user.fid,
+        username: user.username || `fid:${user.fid}`,
+        displayName: user.displayName,
+        pfpUrl: user.pfpUrl,
+        custodyAddress: '', // Will be populated from Neynar
+        verifiedAddresses: [], // Will be populated from Neynar
+      };
+    }
+
+    // Fallback: try explicit sign-in if context doesn't have user
+    console.log('No user in context, attempting signIn...');
     const result = await sdk.actions.signIn({
       nonce: crypto.randomUUID(),
     });
-    
+
     if (!result) {
+      console.log('signIn returned no result');
       return null;
     }
-    
-    // Get user context from SDK
-    const context = await sdk.context;
-    const user = context?.user;
-    
-    if (!user) {
+
+    // Re-check context after sign-in
+    const updatedContext = await sdk.context;
+    const signedInUser = updatedContext?.user;
+
+    if (!signedInUser) {
+      console.log('No user after signIn');
       return null;
     }
-    
+
     return {
-      fid: user.fid,
-      username: user.username || `fid:${user.fid}`,
-      displayName: user.displayName,
-      pfpUrl: user.pfpUrl,
-      custodyAddress: '', // Will be populated from Neynar
-      verifiedAddresses: [], // Will be populated from Neynar
+      fid: signedInUser.fid,
+      username: signedInUser.username || `fid:${signedInUser.fid}`,
+      displayName: signedInUser.displayName,
+      pfpUrl: signedInUser.pfpUrl,
+      custodyAddress: '',
+      verifiedAddresses: [],
     };
   } catch (error) {
     console.error('Sign in failed:', error);
