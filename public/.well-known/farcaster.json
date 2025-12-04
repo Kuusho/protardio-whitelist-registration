@@ -1,0 +1,16 @@
+{
+  "accountAssociation": {
+    "header": "YOUR_HEADER_HERE",
+    "payload": "YOUR_PAYLOAD_HERE", 
+    "signature": "YOUR_SIGNATURE_HERE"
+  },
+  "frame": {
+    "version": "1",
+    "name": "Protardio Whitelist",
+    "iconUrl": "https://protardio.xyz/icon.png",
+    "splashImageUrl": "https://protardio.xyz/splash.png",
+    "splashBackgroundColor": "#0a0a0a",
+    "homeUrl": "https://protardio.xyz",
+    "webhookUrl": ""
+  }
+}

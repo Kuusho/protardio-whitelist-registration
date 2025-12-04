@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-protardio-green: #00ff00;
+    --color-protardio-magenta: #ff00ff;
+    --color-protardio-red: #dc2626;
+    --color-protardio-yellow: #facc15;
+    --color-protardio-bg: #0a0a0a;
+  }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: monospace;
+    background-color: var(--color-protardio-bg);
+    color: white;
+    overflow-x: hidden;
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #1a1a1a;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-protardio-green);
+    border-radius: 0;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #00cc00;
+  }
+}
+
+@layer components {
+  .font-pixel {
+    font-family: 'Press Start 2P', monospace;
+  }
+  
+  /* Button glow effect */
+  .btn-glow {
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .btn-glow:hover {
+    box-shadow: 0 0 40px rgba(0, 255, 0, 0.6);
+  }
+  
+  /* Card border glow */
+  .card-glow {
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.1);
+  }
+  
+  /* Text glow */
+  .text-glow-green {
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+  }
+  
+  .text-glow-magenta {
+    text-shadow: 0 0 10px rgba(255, 0, 255, 0.5);
+  }
+}
+
+@layer utilities {
+  /* Animation for glitch effect */
+  @keyframes glitch {
+    0%, 100% {
+      filter: hue-rotate(0deg) saturate(1);
+    }
+    50% {
+      filter: hue-rotate(90deg) saturate(2);
+    }
+  }
+  
+  .animate-glitch {
+    animation: glitch 0.1s ease-in-out;
+  }
+  
+  /* Scanline animation */
+  @keyframes scan {
+    0% {
+      top: 0%;
+    }
+    100% {
+      top: 100%;
+    }
+  }
+  
+  .animate-scan {
+    animation: scan 3s linear infinite;
+  }
+  
+  /* Pulse glow */
+  @keyframes pulse-glow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(0, 255, 0, 0.6);
+    }
+  }
+  
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  
+  /* CRT flicker */
+  @keyframes flicker {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.98;
+    }
+  }
+  
+  .animate-flicker {
+    animation: flicker 0.05s infinite;
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  .font-pixel {
+    letter-spacing: 0;
+  }
+}

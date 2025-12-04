@@ -1,0 +1,29 @@
+{
+  "name": "protardio-whitelist",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@farcaster/frame-sdk": "^0.1.12",
+    "@supabase/supabase-js": "^2.86.0",
+    "@types/node": "^24.10.1",
+    "@types/react": "^19.2.7",
+    "autoprefixer": "^10.4.22",
+    "axios": "^1.13.2",
+    "next": "^14.2.33",
+    "postcss": "^8.5.6",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.8.3"
+  }
+}
