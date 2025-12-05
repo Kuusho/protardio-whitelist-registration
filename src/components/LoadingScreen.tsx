@@ -38,7 +38,7 @@ export function LoadingScreen({ onComplete }: LoadingScreenProps) {
       {/* Background image - full screen */}
       <div className="absolute inset-0">
         <Image
-          src="/loading-bg.png"
+          src="/loading-bg2.png"
           alt=""
           fill
           className="object-cover"
